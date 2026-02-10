@@ -1,0 +1,52 @@
+#!/bin/sh
+
+PROG_NAME="firstboot"
+BJSON_PATH="/etc/board.json"
+
+usage_print() {
+        echo "Usage: $PROG_NAME [-y][-f]"
+        echo "-y skip the confirmation dialog"
+        echo "-f reset to factory defaults"
+}
+
+for arg in "$@"
+do
+        case "$arg" in
+                "-y" | "-Y")
+                        CONFIRM="1"
+                ;;
+                "-f" | "-F")
+                        FACTORY="1"
+                ;;
+                *)        
+                        usage_print
+	                return 1
+                ;;
+        esac        
+done
+
+if [ "$CONFIRM" != "1" ]; then
+	echo "This will erase all settings and remove any installed packages. Are you sure? [N/y]"
+	read -r answer
+	if [ "$answer" = "${answer#[Yy]}" ]; then
+		return 1
+	fi
+fi
+
+if [ "$FACTORY" = "1" ]; then
+        if [ -e /sbin/esim_delete_profiles ]; then
+                esim_delete_profiles
+        fi
+        # wipe all from log except boostrap profiles
+        find "/log" ! -name "boot_*_iccid" -type f -exec rm -f {} +
+        
+else
+        # reset SMS limit database
+        rm /log/sms.db  &>/dev/null
+fi;
+
+# copy board.json to tmp for proper modem shutdown
+[ -e "$BJSON_PATH" ] && cp "$BJSON_PATH" /tmp/
+
+# now perform rootfs reset
+/sbin/jffs2reset "-y"

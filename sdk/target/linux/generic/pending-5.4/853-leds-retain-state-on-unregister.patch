@@ -1,0 +1,25 @@
+--- a/drivers/leds/led-class.c
++++ b/drivers/leds/led-class.c
+@@ -270,6 +270,12 @@ int led_classdev_register_ext(struct dev
+ 		ret = led_compose_name(parent, init_data, composed_name);
+ 		if (ret < 0)
+ 			return ret;
++
++		if (init_data->fwnode) {
++			if (fwnode_property_present(init_data->fwnode,
++						    "retain-state-shutdown"))
++				led_cdev->flags |= LED_RETAIN_AT_SHUTDOWN;
++		}
+ 	} else {
+ 		proposed_name = led_cdev->name;
+ 	}
+@@ -360,7 +366,8 @@ void led_classdev_unregister(struct led_
+ 	/* Stop blinking */
+ 	led_stop_software_blink(led_cdev);
+ 
+-	led_set_brightness(led_cdev, LED_OFF);
++	if (!(led_cdev->flags & LED_RETAIN_AT_SHUTDOWN))
++		led_set_brightness(led_cdev, LED_OFF);
+ 
+ 	flush_work(&led_cdev->set_brightness_work);
+ 

@@ -1,0 +1,21 @@
+--- a/drivers/Kconfig
++++ b/drivers/Kconfig
+@@ -66,6 +66,8 @@ source "drivers/i3c/Kconfig"
+ 
+ source "drivers/spi/Kconfig"
+ 
++source "drivers/sysfs-mnfinfo/Kconfig"
++
+ source "drivers/spmi/Kconfig"
+ 
+ source "drivers/hsi/Kconfig"
+--- a/drivers/Makefile
++++ b/drivers/Makefile
+@@ -87,6 +87,7 @@ obj-$(CONFIG_HSI)		+= hsi/
+ obj-$(CONFIG_SLIMBUS)		+= slimbus/
+ obj-y				+= net/
+ obj-$(CONFIG_ATM)		+= atm/
++obj-$(CONFIG_SYSFS_MNFINFO)	+= sysfs-mnfinfo/
+ obj-$(CONFIG_FUSION)		+= message/
+ obj-y				+= firewire/
+ obj-$(CONFIG_UIO)		+= uio/

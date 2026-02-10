@@ -1,0 +1,184 @@
+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+/dts-v1/;
+
+#include <dt-bindings/clock/ath79-clk.h>
+
+#define BLOCK_4PIN "1"
+#define BLOCK_10PIN "2"
+#define BLOCK_16PIN "3"
+
+/ {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	cpuintc: interrupt-controller {
+		compatible = "qca,ar7100-cpu-intc";
+
+		interrupt-controller;
+		#interrupt-cells = <1>;
+	};
+
+	mnfinfo: mnfinfo {
+		compatible = "sysfs-mnfinfo";
+		status = "okay";
+
+		mac {
+			reg = <&config 0x0 0x6>;
+			min-res-len = <0xc>;
+			type = "mac";
+			default = "001E42013370";
+			log;
+		};
+
+		name {
+			reg = <&config 0x10 0xc>;
+			type = "ascii";
+			default = "UNKNOWNXXXXX";
+			log;
+		};
+
+		wps {
+			reg = <&config 0x20 0x8>;
+			type = "digit";
+		};
+
+		serial {
+			reg = <&config 0x30 0xa>;
+			type = "alnum";
+			default = "0000000000";
+			log;
+		};
+
+		batch {
+			reg = <&config 0x40 0x4>;
+			type = "digit";
+			default = "0000";
+			log;
+		};
+
+		hwver {
+			reg = <&config 0x50 0x4>;
+			type = "digit";
+			default = "0000";
+			log;
+		};
+
+		hwver_lo {
+			reg = <&config 0x54 0x4>;
+			type = "digit";
+			default = "0000";
+			log;
+		};
+
+		mob_cfg {
+			reg = <&config 0x536 0x4>;
+			type = "digit";
+			default = "0000";
+		};
+
+		wpass {
+			reg = <&config 0x90 0x10>;
+			type = "ascii";
+		};
+
+		pass {
+			reg = <&config 0xa0 0x6a>;
+			type = "ascii";
+		};
+
+		sim_cfg {
+			reg = <&config 0x110 0x20>;
+			type = "simcfg";
+			default = "";
+			log;
+		};
+
+		profiles {
+			reg = <&config 0x130 0x80>;
+			type = "ascii";
+			default = "";
+		};
+
+		sim_count {
+			default =  "0";
+			log;
+		};
+	};
+
+	ahb {
+		compatible = "simple-bus";
+		ranges;
+
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		interrupt-parent = <&cpuintc>;
+
+		apb {
+			compatible = "simple-bus";
+			ranges;
+
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			interrupt-parent = <&miscintc>;
+
+			miscintc: interrupt-controller@18060010 {
+				compatible = "qca,ar7240-misc-intc";
+				reg = <0x18060010 0x4>;
+
+				interrupt-parent = <&cpuintc>;
+				interrupts = <6>;
+
+				interrupt-controller;
+				#interrupt-cells = <1>;
+			};
+		};
+
+		eth0: eth@19000000 {
+			status = "disabled";
+
+			compatible = "qca,ath79-eth", "syscon";
+			reg = <0x19000000 0x200>;
+
+			interrupts = <4>;
+			phy-mode = "mii";
+
+			mdio0: mdio {
+				status = "disabled";
+
+				compatible = "qca,ath79-mdio";
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				regmap = <&eth0>;
+
+				clocks = <&pll ATH79_CLK_MDIO>;
+				clock-names = "ref";
+			};
+		};
+
+		eth1: eth@1a000000 {
+			status = "disabled";
+
+			compatible = "qca,ath79-eth", "syscon";
+			reg = <0x1a000000 0x200>;
+
+			interrupts = <5>;
+			phy-mode = "mii";
+
+			mdio1: mdio {
+				status = "disabled";
+
+				compatible = "qca,ath79-mdio";
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				regmap = <&eth1>;
+
+				clocks = <&pll ATH79_CLK_MDIO>;
+				clock-names = "ref";
+			};
+		};
+	};
+};

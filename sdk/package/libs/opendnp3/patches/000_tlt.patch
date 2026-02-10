@@ -1,0 +1,151 @@
+diff --recursive --unified --new-file --no-dereference --exclude .gitver upstream/cpp/lib/include/opendnp3/gen/Parity.h src/cpp/lib/include/opendnp3/gen/Parity.h
+--- upstream/cpp/lib/include/opendnp3/gen/Parity.h	2021-08-10 13:43:15.000000000 +0000
++++ src/cpp/lib/include/opendnp3/gen/Parity.h	2025-07-29 07:46:54.000000000 +0000
+@@ -44,6 +44,8 @@
+ {
+   Even = 1,
+   Odd = 2,
++  Mark = 3,
++  Space = 4,
+   None = 0
+ };
+ 
+diff --recursive --unified --new-file --no-dereference --exclude .gitver upstream/cpp/lib/src/channel/ASIOSerialHelpers.cpp src/cpp/lib/src/channel/ASIOSerialHelpers.cpp
+--- upstream/cpp/lib/src/channel/ASIOSerialHelpers.cpp	2021-08-10 13:43:15.000000000 +0000
++++ src/cpp/lib/src/channel/ASIOSerialHelpers.cpp	2025-07-29 07:46:54.000000000 +0000
+@@ -88,6 +88,12 @@
+     case (Parity::Odd):
+         t = asio::serial_port_base::parity::odd;
+         break;
++    case (Parity::Mark):
++        t = asio::serial_port_base::parity::mark;
++       break;
++    case (Parity::Space):
++        t = asio::serial_port_base::parity::space;
++       break;
+     default:
+         break;
+     }
+diff --recursive --unified --new-file --no-dereference --exclude .gitver upstream/deps/asio.cmake src/deps/asio.cmake
+--- upstream/deps/asio.cmake	2021-08-10 13:43:15.000000000 +0000
++++ src/deps/asio.cmake	2025-07-29 07:46:54.000000000 +0000
+@@ -1,19 +1,9 @@
+-include(FetchContent)
+ 
+-FetchContent_Declare(
+-    asio
+-    URL      https://github.com/chriskohlhoff/asio/archive/asio-1-16-0.zip
+-    URL_HASH SHA1=6BDD33522D5B95B36445ABB2072A481F7CE15402
+-)
+-
+-FetchContent_GetProperties(asio)
+ if(NOT asio_POPULATED)
+-    FetchContent_Populate(asio)
+-
+     find_package(Threads)
+ 
+     add_library(asio INTERFACE)
+-    target_include_directories(asio INTERFACE ${asio_SOURCE_DIR}/asio/include)
++
+     target_compile_definitions(asio INTERFACE ASIO_STANDALONE)
+     target_compile_features(asio INTERFACE cxx_std_11)
+     target_link_libraries(asio INTERFACE Threads::Threads)
+diff --recursive --unified --new-file --no-dereference --exclude .gitver upstream/deps/catch.cmake src/deps/catch.cmake
+--- upstream/deps/catch.cmake	2021-08-10 13:43:15.000000000 +0000
++++ src/deps/catch.cmake	2025-07-29 07:46:54.000000000 +0000
+@@ -2,6 +2,7 @@
+ 
+ FetchContent_Declare(
+     catch
++    DOWNLOAD_DIR ${DL_DIR}
+     URL                 https://github.com/catchorg/Catch2/releases/download/v2.11.3/catch.hpp
+     URL_HASH            SHA1=C127EBB7A4F65C6CEFF7587C8EF18F84A74D6C15
+     DOWNLOAD_NO_EXTRACT TRUE
+diff --recursive --unified --new-file --no-dereference --exclude .gitver upstream/deps/exe4cpp.cmake src/deps/exe4cpp.cmake
+--- upstream/deps/exe4cpp.cmake	2021-08-10 13:43:15.000000000 +0000
++++ src/deps/exe4cpp.cmake	2025-07-29 07:46:54.000000000 +0000
+@@ -1,15 +1,4 @@
+-include(FetchContent)
+-
+-FetchContent_Declare(
+-    exe4cpp
+-    URL      https://github.com/automatak/exe4cpp/archive/fb878a4de598ba9d6e4338afebf83f96e03af1b8.zip
+-    URL_HASH SHA1=18B141E8CF09DC8D28CC62DD5FA2920670D501BD
+-)
+-
+-FetchContent_GetProperties(exe4cpp)
+ if(NOT exe4cpp_POPULATED)
+-    FetchContent_Populate(exe4cpp)
+-
+     add_library(exe4cpp INTERFACE)
+     target_include_directories(exe4cpp INTERFACE ${exe4cpp_SOURCE_DIR}/src)
+     target_compile_features(exe4cpp INTERFACE cxx_std_14)
+diff --recursive --unified --new-file --no-dereference --exclude .gitver upstream/deps/ser4cpp.cmake src/deps/ser4cpp.cmake
+--- upstream/deps/ser4cpp.cmake	2021-08-10 13:43:15.000000000 +0000
++++ src/deps/ser4cpp.cmake	2025-07-29 07:46:54.000000000 +0000
+@@ -1,15 +1,4 @@
+-include(FetchContent)
+-
+-FetchContent_Declare(
+-    ser4cpp
+-    URL      https://github.com/automatak/ser4cpp/archive/3c449734dc530a8f465eb0982de29165cc4e23d5.zip
+-    URL_HASH SHA1=937B759B7CC80180DA26B47037E796B59798A672
+-)
+-
+-FetchContent_GetProperties(ser4cpp)
+ if(NOT ser4cpp_POPULATED)
+-    FetchContent_Populate(ser4cpp)
+-
+     add_library(ser4cpp INTERFACE)
+     target_include_directories(ser4cpp INTERFACE ${ser4cpp_SOURCE_DIR}/src)
+     target_compile_features(ser4cpp INTERFACE cxx_std_14)
+diff --recursive --unified --new-file --no-dereference --exclude .gitver upstream/deps/serial_port_base.hpp.patch src/deps/serial_port_base.hpp.patch
+--- upstream/deps/serial_port_base.hpp.patch	1970-01-01 00:00:00.000000000 +0000
++++ src/deps/serial_port_base.hpp.patch	2025-07-29 07:46:54.000000000 +0000
+@@ -0,0 +1,13 @@
++diff --git a/asio/include/asio/serial_port_base.hpp b/asio/include/asio/serial_port_base.hpp
++index 1f027601..e2f0c4cf 100644
++--- a/asio/include/asio/serial_port_base.hpp
+++++ b/asio/include/asio/serial_port_base.hpp
++@@ -91,7 +91,7 @@ public:
++   class parity
++   {
++   public:
++-    enum type { none, odd, even };
+++    enum type { none, odd, even, mark, space };
++     ASIO_DECL explicit parity(type t = none);
++     type value() const;
++     ASIO_DECL ASIO_SYNC_OP_VOID store(
+diff --recursive --unified --new-file --no-dereference --exclude .gitver upstream/deps/serial_port_base.ipp.patch src/deps/serial_port_base.ipp.patch
+--- upstream/deps/serial_port_base.ipp.patch	1970-01-01 00:00:00.000000000 +0000
++++ src/deps/serial_port_base.ipp.patch	2025-07-29 07:46:54.000000000 +0000
+@@ -0,0 +1,29 @@
++diff --git a/asio/include/asio/impl/serial_port_base.ipp b/asio/include/asio/impl/serial_port_base.ipp
++index 984d7a85..7cb53d0d 100644
++--- a/asio/include/asio/impl/serial_port_base.ipp
+++++ b/asio/include/asio/impl/serial_port_base.ipp
++@@ -328,7 +328,7 @@ ASIO_SYNC_OP_VOID serial_port_base::flow_control::load(
++ serial_port_base::parity::parity(serial_port_base::parity::type t)
++   : value_(t)
++ {
++-  if (t != none && t != odd && t != even)
+++  if (t != none && t != odd && t != even && t != mark && t != space)
++   {
++     std::out_of_range ex("invalid parity value");
++     asio::detail::throw_exception(ex);
++@@ -374,6 +374,15 @@ ASIO_SYNC_OP_VOID serial_port_base::parity::store(
++     storage.c_iflag |= INPCK;
++     storage.c_cflag |= (PARENB | PARODD);
++     break;
+++  case mark:
+++    storage.c_iflag |= INPCK;
+++    storage.c_cflag |= PARENB | CMSPAR | PARODD;
+++    break;
+++  case space:
+++    storage.c_iflag |= INPCK;
+++    storage.c_cflag |= PARENB | CMSPAR;
+++    storage.c_cflag &= ~PARODD;
+++    break;
++   default:
++     break;
++   }

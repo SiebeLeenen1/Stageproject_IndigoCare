@@ -1,0 +1,1 @@
+{"services/vpn/dmvpn":{"description":"dmvpn configuration","read":{"api":{"/dmvpn/*":["*"],"/gre/config/*":["id"],"/interfaces/config/*":["id","proto","ifname"]}},"write":{"api":["/dmvpn/*"]}}}

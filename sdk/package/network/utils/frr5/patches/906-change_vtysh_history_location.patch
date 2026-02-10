@@ -1,0 +1,13 @@
+--- a/vtysh/vtysh_main.c
++++ b/vtysh/vtysh_main.c
+@@ -543,7 +543,9 @@ int main(int argc, char **argv, char **e
+ 	 * If we can't find the home directory, then don't store
+ 	 * the history information
+ 	 */
+-	homedir = vtysh_get_home();
++	// homedir = vtysh_get_home();
++	// as /root is becoming readonly, changed default history location to tmp
++	homedir = "/tmp";
+ 	if (homedir) {
+ 		snprintf(history_file, sizeof(history_file), "%s/.history_frr",
+ 			 homedir);
