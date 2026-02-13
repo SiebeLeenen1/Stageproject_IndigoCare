@@ -1,3 +1,0 @@
-#!/bin/sh
-
-./scripts/auto-exec.sh ./scripts/fw_files_diff.py "$@"

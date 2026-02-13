@@ -1,5 +1,0 @@
-config BUILD_BOOTLOADER
-	bool
-	depends on BUILD_FACTORY_IMAGE && TARGET_ath79
-	select PACKAGE_uboot-ath79
-

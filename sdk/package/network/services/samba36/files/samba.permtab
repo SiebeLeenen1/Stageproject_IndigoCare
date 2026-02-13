@@ -1,3 +1,0 @@
-/etc/config/samba                        samba:samba       666       -
-/etc/samba/smb.conf.template             samba:samba       660       -
-/etc/samba/smbpasswd                     samba:samba       660       -

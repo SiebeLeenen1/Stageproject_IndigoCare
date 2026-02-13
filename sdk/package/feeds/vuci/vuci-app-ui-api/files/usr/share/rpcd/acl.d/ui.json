@@ -1,1 +1,0 @@
-{"system/ui":{"description":"webui menu info","read":{"api":{"/ui/*":["*"],"/system/config/*":["*"]}},"write":{"api":["/ui/*","/system/config/*"]}}}

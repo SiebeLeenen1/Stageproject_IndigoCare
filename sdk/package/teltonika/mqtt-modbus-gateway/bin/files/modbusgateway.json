@@ -1,4 +1,0 @@
-{
-	"user": "mqtt_modbus_gateway",
-	"publish": [ "mqtt-modbus-gateway" ]
-}

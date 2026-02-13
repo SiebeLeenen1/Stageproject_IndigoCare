@@ -1,8 +1,0 @@
-{
-  "network/devices": {
-    "title": "Devices",
-    "acls": ["network/devices"],
-    "view": "network/Devices",
-    "index": 95
-  }
-}

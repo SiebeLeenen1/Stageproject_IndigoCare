@@ -1,8 +1,0 @@
-{
-  "network/routes/vrf": {
-    "title": "VRF",
-    "index": 50,
-    "view": "network/VRF",
-    "acls": ["network/vrf"]
-  }
-}

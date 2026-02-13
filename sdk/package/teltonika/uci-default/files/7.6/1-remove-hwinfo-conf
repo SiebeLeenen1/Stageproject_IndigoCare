@@ -1,3 +1,0 @@
-[ -f /etc/config/hwinfo ] && rm /etc/config/hwinfo
-
-exit 0

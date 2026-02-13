@@ -1,7 +1,0 @@
-#!/bin/sh
-
-case "${ACTION:-ifup}" in
-	ifup)
-	    /etc/init.d/ntpd reload
-	;;
-esac

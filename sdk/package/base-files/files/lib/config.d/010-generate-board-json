@@ -1,7 +1,0 @@
-#!/bin/sh
-
-generate_board_json() {
-    /bin/board_detect
-}
-
-conf_register_init_hook generate_board_json

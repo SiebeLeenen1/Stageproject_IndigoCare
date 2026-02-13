@@ -1,9 +1,0 @@
-{
-  "services/event_juggler": {
-    "title": "Event Juggler",
-    "index": 300,
-    "view": "services/EventsJuggler",
-    "acls": ["services/event_juggler"],
-    "files": ["/etc/config/event_juggler"]
-  }
-}

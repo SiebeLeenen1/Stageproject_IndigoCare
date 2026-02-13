@@ -1,2 +1,0 @@
-sed -i -e '/^dest root \/$/c\dest root /usr/local\ndest ro /' \
-    -e 's|option overlay_root /overlay|option overlay_root /usr/local|' /etc/opkg.conf

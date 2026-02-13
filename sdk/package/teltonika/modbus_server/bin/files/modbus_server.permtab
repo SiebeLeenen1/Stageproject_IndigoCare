@@ -1,3 +1,0 @@
-/etc/config/modbus_server modbus_server:modbus_server 660
-/usr/local/share/modbus/ modbus_server:modbus_server 755 cd
-/usr/local/share/modbus/ modbus_server:modbus_server 755 r

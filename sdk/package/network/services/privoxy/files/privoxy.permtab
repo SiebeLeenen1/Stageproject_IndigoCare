@@ -1,2 +1,0 @@
-/etc/config/privoxy    privoxy:privoxy       666       -
-/var/log/privoxy       privoxy:privoxy       -         cd

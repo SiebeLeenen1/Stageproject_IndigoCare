@@ -1,8 +1,0 @@
-{
-	"user": "ds",
-	"access": {
-		"ioman.*": {
-			"methods": [ "status", "location" ]
-		}
-	}
-}

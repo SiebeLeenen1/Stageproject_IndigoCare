@@ -1,8 +1,0 @@
-{
-	"user": "ds",
-	"access": {
-		"mdcollect": {
-			"methods": [ "get", "get_raw", "get_raw_total" ]
-		}
-	}
-}

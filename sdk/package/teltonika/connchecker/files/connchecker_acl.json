@@ -1,9 +1,0 @@
-{
-	"user": "connchecker",
-	"publish": [ "connchecker" ],
-	"access": {
-		"log": {
-			"methods": [ "write_ext" ]
-		}
-	}
-}

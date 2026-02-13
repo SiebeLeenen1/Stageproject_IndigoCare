@@ -1,3 +1,0 @@
-#!/bin/sh
-
-/usr/local/usr/lib/qos/generate.sh all | sh

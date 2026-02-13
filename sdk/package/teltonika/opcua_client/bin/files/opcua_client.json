@@ -1,4 +1,0 @@
-{
-	"user": "opcua_client",
-	"publish": [ "opcua_client.app" ]
-}

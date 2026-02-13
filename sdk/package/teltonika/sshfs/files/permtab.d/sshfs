@@ -1,2 +1,0 @@
-# setup fuse.config
-/etc/fuse.config		root:user		660	cf
